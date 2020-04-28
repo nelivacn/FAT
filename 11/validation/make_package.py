@@ -25,7 +25,7 @@ print(cmd)
 os.system(cmd)
 #cmd = 'wget -O ./fat_11_public.gpg https://raw.githubusercontent.com/nelivacn/FAT/master/files/fat_11_public.gpg'
 #os.system(cmd)
-cmd = 'gpg --import ./fat_11_public.gpg'
+cmd = 'gpg --import ../../files/fat_11_public.gpg'
 os.system(cmd)
 cmd = 'gpg --default-key %s --output %s.tar.gpg --encrypt --recipient fat@zhongdun.com.cn --sign %s.tar' % (args.email, filename, filename)
 os.system(cmd)

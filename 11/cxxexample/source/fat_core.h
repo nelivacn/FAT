@@ -29,7 +29,7 @@ class FATImpl {
 
         void GetFeature(char* img, int width, int height, int channel, int im_type, float* feat);
 
-        float GetSim(float* feat1, int im1_type, float* feat2, int im2_type);
+        float GetSim(float* feat1, float* feat2);
 
     private:
         std::shared_ptr<Detector> detector_;

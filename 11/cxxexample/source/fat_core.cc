@@ -43,7 +43,7 @@ void FATImpl::GetFeature(char* c_img, int width, int height, int channel, int im
     feature_->Get(im, faces[0], feat);
 }
 
-float FATImpl::GetSim(float* im1_feat, int im1_type, float* im2_feat, int im2_type) {
+float FATImpl::GetSim(float* im1_feat, float* im2_feat) {
     int size = FeatureLength();
     float norm1 = 0.0;
     float norm2 = 0.0;
@@ -55,6 +55,7 @@ float FATImpl::GetSim(float* im1_feat, int im1_type, float* im2_feat, int im2_ty
     }
     sim /= sqrt(norm1+0.00001);
     sim /= sqrt(norm2+0.00001);
+    sim = (sim+1.0)/2.0;
     return sim;
 }
 

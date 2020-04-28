@@ -11,7 +11,7 @@ cdef extern from "source/fat_core.h" namespace "FAT":
         void Load(string rdir)
         int FeatureLength()
         void GetFeature(char* img, int im_width, int im_height, int im_channel, int im_type, float* feat)
-        float GetSim(float* im1_feat, int im1_type, float* im2_feat, int im2_type)
+        float GetSim(float* im1_feat, float* im2_feat)
 
 cdef class PyFAT:
 
@@ -33,6 +33,6 @@ cdef class PyFAT:
         self.obj.GetFeature(<char*> np.PyArray_DATA(img), img.shape[1], img.shape[0], img.shape[2], im_type, <float*> np.PyArray_DATA(feat))
         return feat
 
-    def get_sim(self, np.ndarray[float, ndim=1, mode = "c"] feat1 not None, int im_type1, np.ndarray[float, ndim=1, mode = "c"] feat2 not None, int im_type2):
-        return self.obj.GetSim(<float*> np.PyArray_DATA(feat1), im_type1, <float*> np.PyArray_DATA(feat2), im_type2)
+    def get_sim(self, np.ndarray[float, ndim=1, mode = "c"] feat1 not None, np.ndarray[float, ndim=1, mode = "c"] feat2 not None):
+        return self.obj.GetSim(<float*> np.PyArray_DATA(feat1), <float*> np.PyArray_DATA(feat2))
 
