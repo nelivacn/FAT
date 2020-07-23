@@ -48,7 +48,7 @@ void FATImpl::GetFeature(char* c_img, int width, int height, int channel, int im
 
 void FATImpl::Finalize(float* gallery_feats, int* gallery_labels, int N, int K) {
     //gallery_feats_ = gallery_feats;
-    gallery_feats_ = cv::Mat(cv::Size(N_, FeatureLength()), CV_32FC1, gallery_feats);
+    gallery_feats_ = cv::Mat(cv::Size(FeatureLength(), N), CV_32FC1, gallery_feats);
     gallery_labels_ = gallery_labels;
     N_ = N;
     K_ = K;
@@ -58,8 +58,8 @@ void FATImpl::Finalize(float* gallery_feats, int* gallery_labels, int N, int K) 
 
 void FATImpl::GetTopK(float* im_feat, int* topk, float* sim) {
     int size = FeatureLength();
-    cv::Mat im_feat_mat = cv::Mat(cv::Size(size, 1), CV_32FC1, im_feat);
-    cv::Mat ret = gallery_feats_ * im_feat_mat;
+    cv::Mat im_feat_mat = cv::Mat(cv::Size(1, size), CV_32FC1, im_feat);
+    cv::Mat ret = gallery_feats_ * im_feat_mat / 2 + .5;
     //for(int n=0;n<N_;n++) {
     //    int a = n*size;
     //    //int b = (n+1)*size;

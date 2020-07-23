@@ -188,7 +188,7 @@ void Feature::Get(const cv::Mat& img, const Face& face, float* feat) {
         norm += feat[i]*feat[i];
     }
     for(std::size_t i=0;i<output.total();i++) {
-        feat[i] /= norm;
+        feat[i] /= std::sqrt(norm);
     }
 }
 

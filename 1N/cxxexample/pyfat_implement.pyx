@@ -18,13 +18,16 @@ cdef class PyFAT:
 
     cdef FATImpl obj
     cdef int feat_length
+    cdef int K
+    cdef np.float32_t [:, :] G_feats
+    cdef long [:] G_labels
 
     #N is number of gallery images, K is top K
     def __cinit__(self, N, K):
         self.obj = FATImpl()
         self.feat_length = self.obj.FeatureLength()
         self.G_feats = np.zeros( (N, self.feat_length), dtype=np.float32 )
-        self.G_labels = np.zeros( (N,), dtype=np.int)
+        self.G_labels = np.zeros( (N,), dtype=np.int64)
         self.K = K
         #self.idx = 0
 
@@ -34,13 +37,13 @@ cdef class PyFAT:
     def load(self, rdir):
         self.obj.Load(bytes(rdir, encoding='utf-8'))
 
-    def insert_gallery(self, np.ndarray[float, ndim=1, mode = "c"] feat not None, int idx, int label, int im_type=0):
+    def insert_gallery(self, np.float32_t [:] feat not None, int idx, int label, int im_type=0):
         assert idx<self.G_feats.shape[0]
         self.G_feats[idx] = feat
         self.G_labels[idx] = label
 
     def finalize(self):
-        self.obj.Finalize(<float*> np.PyArray_DATA(self.G_feats), <int*> np.PyArray_DATA(self.G_labels), self.G_feats.shape[0], self.K)
+        self.obj.Finalize(<float*> np.PyArray_DATA(np.asarray(self.G_feats)), <int*> np.PyArray_DATA(np.asarray(self.G_labels)), self.G_feats.shape[0], self.K)
 
 
     def get_feature(self, np.ndarray[char, ndim=3, mode = "c"] img not None, int im_type=0):
