@@ -27,7 +27,7 @@ os.system(cmd)
 #os.system(cmd)
 cmd = 'gpg --import ../../files/fat_11_public.gpg'
 os.system(cmd)
-cmd = 'gpg --default-key %s --output %s.tar.gpg --encrypt --recipient fat@neliva.com.cn --sign %s.tar' % (args.email, filename, filename)
+cmd = 'gpg --default-key %s --output %s.tar.gpg --encrypt --recipient fatai@neliva.com.cn --sign %s.tar' % (args.email, filename, filename)
 os.system(cmd)
 cmd = 'gpg --armor --output %s.gpg.key --export %s' % (args.shortname, args.email)
 os.system(cmd)
