@@ -1,4 +1,5 @@
 python example README
 
-TODO
+This is a InsightFace based FAT-AI 1:1 example.
+
 
