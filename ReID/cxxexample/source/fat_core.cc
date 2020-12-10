@@ -39,10 +39,9 @@ void FATImpl::GetFeature(char* c_img, int width, int height, int channel, int im
 }
 
 
-void FATImpl::Finalize(float* gallery_feats, int* gallery_labels, int N, int K) {
+void FATImpl::Finalize(float* gallery_feats, int N, int K) {
     //gallery_feats_ = gallery_feats;
     gallery_feats_ = cv::Mat(cv::Size(FeatureLength(), N), CV_32FC1, gallery_feats);
-    gallery_labels_ = gallery_labels;
     N_ = N;
     K_ = K;
     buffer_.resize(N_);
