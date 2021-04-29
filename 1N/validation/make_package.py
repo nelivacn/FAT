@@ -20,19 +20,19 @@ package_files.append('%s/assets'%args.path)
 
 filename = '%s_1n_v%02d' % (args.shortname, args.number)
 
-cmd = "tar -cvf %s.tar %s"%(filename, " ".join(package_files))
+cmd = "tar -czvf %s.tar.gz %s"%(filename, " ".join(package_files))
 print(cmd)
 os.system(cmd)
 #cmd = 'wget -O ./fat_11_public.gpg https://raw.githubusercontent.com/nelivacn/FAT/master/files/fat_11_public.gpg'
 #os.system(cmd)
-cmd = 'gpg --import ../../files/fat_11_public.gpg'
-os.system(cmd)
-cmd = 'gpg --default-key %s --output %s.tar.gpg --encrypt --recipient fatai@neliva.com.cn --sign %s.tar' % (args.email, filename, filename)
-os.system(cmd)
-cmd = 'gpg --armor --output %s.gpg.key --export %s' % (args.shortname, args.email)
-os.system(cmd)
-cmd = 'tar -czf %s.tar.gz %s.tar.gpg %s.gpg.key' % (filename, filename, args.shortname)
-os.system(cmd)
+# cmd = 'gpg --import ../../files/fat_11_public.gpg'
+# os.system(cmd)
+# cmd = 'gpg --default-key %s --output %s.tar.gpg --encrypt --recipient fatai@neliva.com.cn --sign %s.tar' % (args.email, filename, filename)
+# os.system(cmd)
+# cmd = 'gpg --armor --output %s.gpg.key --export %s' % (args.shortname, args.email)
+# os.system(cmd)
+# cmd = 'tar -czf %s.tar.gz %s.tar.gpg %s.gpg.key' % (filename, filename, args.shortname)
+# os.system(cmd)
 
 print('Please submit %s.tar.gz'%filename)
 
