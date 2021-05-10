@@ -134,8 +134,11 @@ class ArcFaceORT:
         self.input_std = input_std
         for initn in graph.initializer:
             weight_array = numpy_helper.to_array(initn)
-            if weight_array.dtype!=np.float32:
-                return 'all weights should be float32 dtype'
+#             if weight_array.dtype!=np.float32:
+#                 return 'all weights should be float32 dtype'
+            dt = weight_array.dtype
+            if dt.itemsize < 4:
+                return 'invalid weight type - (%s:%s)' % (initn.name, dt.name)
         if test_img is None:
             test_img = np.random.randint(0, 255, size=(self.image_size[1], self.image_size[0], 3), dtype=np.uint8 )
         else:
