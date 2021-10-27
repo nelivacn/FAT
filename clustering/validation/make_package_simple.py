@@ -13,12 +13,13 @@ parser.add_argument('--number', type=int, default=0,
                     help='submission number, like 0,1,2...')
 args = parser.parse_args()
 
-package_files = list(glob.glob('%s/pyfat_implement*'%args.path))
-package_files.append('%s/assets'%args.path)
+# package_files = list(glob.glob('%s/pyfat_implement*'%args.path))
+# package_files.append('%s/assets'%args.path)
 
 final_name = 'Clustering_%s_v%02d' % (args.shortname, args.number)
 
-cmd = "tar -czvf %s.tar.gz %s" % (final_name, " ".join(package_files))
+# cmd = "tar -czvf %s.tar.gz %s" % (final_name, " ".join(package_files))
+cmd = "tar -czvf %s.tar.gz %s" % (final_name, args.path)
 print(cmd)
 os.system(cmd)
 
