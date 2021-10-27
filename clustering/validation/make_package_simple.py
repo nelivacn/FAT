@@ -16,15 +16,10 @@ args = parser.parse_args()
 package_files = list(glob.glob('%s/pyfat_implement*'%args.path))
 package_files.append('%s/assets'%args.path)
 
-filename = '%s_Clustering_v%02d' % (args.shortname, args.number)
-
-cmd = "tar -cvf %s.tar %s"%(filename, " ".join(package_files))
-print(cmd)
-os.system(cmd)
-
 final_name = 'Clustering_%s_v%02d' % (args.shortname, args.number)
-cmd = "tar -czf %s.tar.gz %s.tar" % (final_name, filename)
+
+cmd = "tar -czvf %s.tar.gz %s" % (final_name, " ".join(package_files))
 print(cmd)
 os.system(cmd)
-print('Please submit %s.tar.gz'%final_name)
 
+print('Please submit %s.tar.gz' % final_name)
