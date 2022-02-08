@@ -42,7 +42,10 @@ Detector::Detector(const std::string& model_file,
 {
   /* Load the network. */
     net_ = cv::dnn::readNetFromCaffe(model_file, weights_file);
-    net_.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
+    // net_.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
+    cv::cuda::setDevice(0);
+    net_.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+    net_.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
     //output_names_ = {"face_rpn_cls_prob_reshape_stride32", "face_rpn_bbox_pred_stride32", "face_rpn_landmark_pred_stride32",
     //           "face_rpn_cls_prob_reshape_stride16", "face_rpn_bbox_pred_stride16", "face_rpn_landmark_pred_stride16",
     //           "face_rpn_cls_prob_reshape_stride8", "face_rpn_bbox_pred_stride8", "face_rpn_landmark_pred_stride8"};
@@ -183,4 +186,75 @@ std::vector<Face> Detector::Detect(const cv::Mat& img, float score_thresh, std::
     return r2;
 }
 
+
+
+std::vector<std::vector<Face>> Detector::DetectBatch(
+    const std::vector<cv::Mat> imgs, float score_thresh, std::size_t det_max){
+    // do process
+    std::vector<cv::Mat> input_imgs(imgs.size());
+    std::vector<float> im_scales(imgs.size());
+    for(int i = 0; i < imgs.size(); i++ ){
+        im_scales[i] = Preprocess_(imgs[i], input_imgs[i]);
+        // cv::imwrite(std::to_string(i) + ".jpg", input_imgs[i]);
+    }
+    auto blob = cv::dnn::blobFromImages(input_imgs, 1.0, cv::Size(input_size_, input_size_), cv::Scalar(0.0, 0.0, 0.0), true, false);
+    net_.setInput(blob);
+    std::vector<cv::Mat> outputs;
+    net_.forward(outputs, output_names_);
+    std::vector<std::vector<Face>> _final_faces;
+    // std::cout << "outputs size: " << outputs.size() << std::endl;
+    for(int n = 0; n< input_imgs.size(); n++){
+        std::vector<Face> proposals;
+        for (std::size_t idx = 0; idx < ac_.size(); idx++) {
+            std::vector<cv::Range> ranges = {cv::Range(n,n+1), cv::Range::all(), cv::Range::all(), cv::Range::all()};
+            cv::Mat cls = outputs[idx*3]  (ranges);
+            cv::Mat reg = outputs[idx*3+1](ranges);
+            cv::Mat pts = outputs[idx*3+2](ranges);
+            // ac_[idx].Predict(cls, reg, pts, score_thresh, proposals);
+            // for(int n = 0; n < imgs.size(); n++){
+                
+            // }
+            // std::cout << "cls size: " << cls.size.dims()<< ": " << cls.size[0] << " ," << cls.size[1] << ", " << cls.size[2] << ", " << cls.size[3] << std::endl;
+            // std::cout << "reg size: " << reg.size.dims()<< ": " << reg.size[0] << " ," << reg.size[1] << ", " << reg.size[2] << ", " << reg.size[3] << std::endl;
+            // std::cout << "pts size: " << pts.size.dims()<< ": " << pts.size[0] << " ," << pts.size[1] << ", " << pts.size[2] << ", " << pts.size[3] << std::endl;
+            ac_[idx].Predict(cls, reg, pts, score_thresh, proposals);
+        }
+        std::vector<Face> result;
+        NMS_CPU(proposals, nms_thresh_, result);  
+        for(Face& face : result) {
+            for(int i=0;i<4;i++) {
+                face.bbox[i] /= im_scales[n];
+            }
+            // std::cout << "fpts size: " << face.pts.size() << std::endl;
+            for(std::size_t i=0;i<face.pts.size();i++) {
+                face.pts[i].x /= im_scales[n];
+                face.pts[i].y /= im_scales[n];
+            }
+        }
+        std::vector<std::pair<float, std::size_t>> sel;
+        for(std::size_t i=0;i<result.size();i++) {
+            const Face& face = result[i];
+            float w = face.bbox[2] - face.bbox[0];
+            float h = face.bbox[3] - face.bbox[1];
+            float wc = (face.bbox[2] + face.bbox[0])/2;
+            float hc = (face.bbox[3] + face.bbox[1])/2;
+            float wd = wc - imgs[n].cols/2;
+            float hd = hc - imgs[n].rows/2;
+            float area = w*h;
+            float score = area - (wd*wd+hd*hd)*2.0;
+            score *= -1.0;
+            sel.push_back(std::make_pair(score, i));
+        }
+        std::sort(sel.begin(), sel.end());
+        std::size_t ret_count = sel.size();
+        if(det_max>0 and ret_count>det_max) ret_count = det_max;
+        std::vector<Face> r2;
+        for(std::size_t i=0;i<ret_count;i++) {
+            r2.push_back( result[sel[i].second] );
+        }
+        // std::cout << "faces: " << r2[0].bbox[0] << ", " << r2[0].bbox[1] << ", " << r2[0].bbox[2] << ", " << r2[0].bbox[3] << std::endl;
+        _final_faces.push_back(r2);
+    }
+    return _final_faces;
+}
 
