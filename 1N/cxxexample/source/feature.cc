@@ -6,6 +6,7 @@
 */
 #include "feature.h"
 
+
 using namespace FAT;
 
 cv::Mat meanAxis0(const cv::Mat &src)
@@ -139,13 +140,21 @@ cv::Mat similarTransform(cv::Mat src,cv::Mat dst) {
 Feature::Feature(const std::string& onnx_file) {
     std::cout<<"Loading: "<<onnx_file<<std::endl;
     net_ = cv::dnn::readNetFromONNX(onnx_file);
-    net_.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
-    float v[5][2] = {
+    // net_.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
+    net_.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+    net_.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
+    /* float v[5][2] = {
       {38.2946f, 51.6963f},
       {73.5318f, 51.5014f},
       {56.0252f, 71.7366f},
       {41.5493f, 92.3655f},
-      {70.7299f, 92.2041f}}; //112x112
+      {70.7299f, 92.2041f}}; //112x112 */
+    float v[5][2] = {
+      { 45.20018361,  61.01858361},
+      { 86.79163279,  60.7885377},
+      { 66.12810492,  84.6727082 },
+      { 49.04179672, 109.02157377},
+      { 83.48447213, 108.83106885}}; //  144 * 144
     dst_ = cv::Mat(5,2,CV_32FC1);
     memcpy(dst_.data, v, 2 * 5 * sizeof(float));
 }
@@ -153,7 +162,8 @@ Feature::Feature(const std::string& onnx_file) {
 void Feature::Get(const cv::Mat& img, const Face& face, float* feat) {
     //cv::imwrite("./raw.png", img);
     cv::Mat input;
-    cv::Size input_size(112, 112);
+    // cv::Size input_size(112, 112);
+    cv::Size input_size(144, 144);
     if(face.pts.empty()) {
         cv::resize(img, input, input_size);
     }
@@ -176,9 +186,11 @@ void Feature::Get(const cv::Mat& img, const Face& face, float* feat) {
         cv::Mat trans_mat = similarTransform(src,dst_);
         cv::warpAffine(img, input, trans_mat, input_size); 
     }
-    //cv::imwrite("./aligned.png", input);
-    auto blob = cv::dnn::blobFromImage(input, 1.0, input_size, cv::Scalar(0.0, 0.0, 0.0), true, false);
-    cv::Mat feature;
+    // static int _i = 0;
+    // cv::imwrite(std::string("./aligned") + std::to_string(_i) + ".jpg", input);
+    // _i ++;
+    auto blob = cv::dnn::blobFromImage(input, 1.0/127.5, input_size, cv::Scalar(127.5, 127.5, 127.5), true, false);
+    // cv::Mat feature;
     net_.setInput(blob);
     cv::Mat output = net_.forward();
     //std::cout<<output.total()<<std::endl;
@@ -192,3 +204,50 @@ void Feature::Get(const cv::Mat& img, const Face& face, float* feat) {
     }
 }
 
+
+
+void Feature::Gets(const std::vector<cv::Mat>& imgs, const std::vector<std::vector<Face>>& faces, std::vector<float*> &feats)
+{
+    std::vector<cv::Mat> input_imgs(imgs.size());
+    // cv::Size input_size(112, 112);
+    cv::Size input_size(144, 144);
+    for(int n = 0; n < imgs.size(); n++){
+        if(faces[n].size() == 0 || faces[n][0].pts.empty()) {
+            // std::cout << "do directly resize" << std::endl;
+            cv::resize(imgs[n], input_imgs[n], input_size);
+        }
+        else {
+            // std::cout << "do warp affine resize" << std::endl;
+            float v[5][2];
+            for(int i=0;i<5;i++) {
+                v[i][0] = faces[n][0].pts[i].x;
+                v[i][1] = faces[n][0].pts[i].y;
+                //  std::cout << "pts " << i << ": " << v[i][0] << ", " << v[i][1] << std::endl;
+            }
+            cv::Mat src(5,2,CV_32FC1, v);
+            cv::Mat trans_mat = similarTransform(src,dst_);
+            cv::warpAffine(imgs[n], input_imgs[n], trans_mat, input_size); 
+            // cv::imwrite(std::string("./aligned") + std::to_string(n) + ".jpg", input_imgs[n]);
+        }
+    }
+    auto blob = cv::dnn::blobFromImages(input_imgs, 1.0/127.5, input_size, cv::Scalar(127.5, 127.5, 127.5), true, false);
+    net_.setInput(blob);
+    cv::Mat output = net_.forward();
+    // std::cout<<output.total()<<std::endl;
+    /*std::cout << "output size: " <<
+        output.size.dims()<< ": " << 
+        output.size[0] << " ," << 
+        output.size[1] << ", " << 
+        output.size[2] << ", " << 
+        output.size[3] << std::endl;*/
+    for(int n = 0; n < imgs.size(); n++){
+        memcpy(feats[n], ((float*)output.data) + n * output.size[1], sizeof(float)*output.size[1]);
+        float norm = 0.00001;
+        for(std::size_t i = 0; i < output.size[1]; i++) {
+            norm += feats[n][i]*feats[n][i];
+        }
+        for(std::size_t i = 0; i < output.size[1]; i++) {
+            feats[n][i] /= std::sqrt(norm);
+        }
+    }
+}
