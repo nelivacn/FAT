@@ -21,6 +21,8 @@ public:
        std::size_t input_size);
 
     std::vector<Face> Detect(const cv::Mat& img, float score_thresh, std::size_t det_max=1);
+    std::vector<std::vector<Face>> DetectBatch(
+        const std::vector<cv::Mat> imgs, float score_thresh, std::size_t det_max=1);
     static void NMS_CPU(std::vector<Face>& faces, float threshold, std::vector<Face>& out) {
         if(faces.size() == 0) return;
 
