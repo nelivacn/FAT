@@ -16,6 +16,7 @@ public:
     Feature(const std::string& onnx_file);
     static int FeatureLength() { return 512; }
     void Get(const cv::Mat& img, const Face& face, float* feat);
+    void Gets(const std::vector<cv::Mat>& imgs, const std::vector<std::vector<Face>>& faces, std::vector<float*> &feats);
 
 
 private:
