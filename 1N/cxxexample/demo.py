@@ -59,9 +59,10 @@ def item_distribute(q, q_list, stop_count):
             item = q.get()
             if item is None:
                 stop_count -= 1
-            if stop_count == 0:
-                break
-            _q.put(item)
+                if stop_count == 0:
+                    break
+            else:
+                _q.put(item)
         if stop_count == 0:
             break
     for _q in q_list:
