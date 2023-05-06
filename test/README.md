@@ -7,6 +7,6 @@
 docker pull msbrm/fat_gpu:2023ubuntu18.04
 ```
 ```
-  docker pull msbrm/fat_gpu:2023centos7
+docker pull msbrm/fat_gpu:2023centos7
 ```
 * 启动容器
