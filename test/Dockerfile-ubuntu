@@ -1,0 +1,36 @@
+FROM nvidia/cuda:11.4.0-cudnn8-devel-ubuntu18.04
+
+RUN set -ex \
+    && rm /etc/apt/sources.list.d/cuda.list \
+    && mkdir -p /workspace \
+    && apt-get update -y \
+    && apt-get -y install python3.8 python3-pip python3-dev \
+    && apt-get -y install libsm6 libxrender1 libxext-dev vim iputils-ping \
+    && apt-get -y install systemd \
+    && cd /usr/local/bin \
+    && rm -f python \
+    && rm -f python3 \
+    && rm -f pip \
+    && rm -f pip3 \
+    && ln -s /usr/bin/python3.8 python \
+    && ln -s /usr/bin/python3.8 python3 \
+    && ln -s /usr/bin/pip3 pip \
+    && ln -s /usr/bin/pip3 pip3 \
+    && python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip \
+    && python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple opencv-python \
+    && python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple opencv-python-headless \
+    && apt-get clean
+
+# COPY java-app.tar.gz /tmp
+# COPY data.tar.gz /tmp
+
+RUN set -ex \
+    # && tar zxf /tmp/java-app.tar.gz -C /workspace \
+    # && tar zxf /tmp/data.tar.gz -C /workspace \
+    && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
+
+WORKDIR /workspace/docker-ceping1
+
+ENTRYPOINT [ "/sbin/init" ]
+
+# docker build -f Dockerfile-ubuntu -t msbrm/fat_gpu:2023ubuntu18.04 .
