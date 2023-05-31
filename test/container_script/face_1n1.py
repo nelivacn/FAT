@@ -20,6 +20,7 @@ log_name = f'{TASK_ID}_{get_now_str()}'
 prepare_logging(log_name)
 LOGGER = logging.getLogger(log_name)
 MSG = logging.getLogger('msg')
+DEVICE = [0, 1]
 
 
 def get_feature_tester(fat, test_item_q, feat_q, gfbn):
@@ -94,10 +95,13 @@ def get_topk_tester(fat, feat_item_q, res_q, gtkbn):
 
     def get_topk_tester_batch(fat, _item_list_inner, res_q):
         _feat_data_list = []
+        _issuc_list = []
         for _i in _item_list_inner:
             det_feat = _i[1]
+            issuc = _i[0]
             _feat_data_list.append(det_feat)
-        idxs, sims = fat.get_topk(_feat_data_list)
+            _issuc_list.append(issuc)
+        idxs, sims = fat.get_topk(_feat_data_list, _issuc_list)
         for index in range(len(_feat_data_list)):
             _item_inner = _item_list_inner[index]
             _info = _item_inner[1]
@@ -165,9 +169,9 @@ if __name__ == '__main__':
         fat = PyFAT(gallery_count, 1)
         LOGGER.info('fat init')
         assets_dir = str(fat_dir / 'assets')
-        # fat.load(assets_dir, [0, 1])
-        fat.load(assets_dir)
         LOGGER.info(f'fat load {assets_dir}')
+        LOGGER.info(f'device: {DEVICE}')
+        fat.load(assets_dir, DEVICE)
         gfpn, gfbn = fat.get_feature_parallel_num()
         gtkpn, gtkbn = fat.get_topk_parallel_num()
         LOGGER.info(
@@ -205,7 +209,7 @@ if __name__ == '__main__':
             LOGGER.info('in get_feature_tester')
             pp.start()
 
-        LOGGER.info('db gallery insert begin')
+        LOGGER.info('gallery insert begin')
         insert_count, gallery_feat_none_count = 0, 0
         while True:
             item = gallery_feat_q.get()
