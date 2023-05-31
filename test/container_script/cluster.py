@@ -187,13 +187,11 @@ if __name__ == '__main__':
         LOGGER.info('cluster end')
         MSG.info(f'{PROGRESS_FLAG}cluster end')
 
-        fat.unload_cluster()
-        LOGGER.info('unload_cluster')
-
         LOGGER.info('query start')
         query_count = 0
         all_clusters = fat.get_all_clusters()
         clusters_num = fat.get_clusters_num()
+        assert len(all_clusters) == clusters_num
         for cluster_id in all_clusters:
             cluster_idx = fat.query_all_of_cluster(cluster_id)
             main_id = fat.query_cover_idx(cluster_id)
@@ -217,6 +215,8 @@ if __name__ == '__main__':
         LOGGER.info('query end')
         MSG.info('query end')
 
+        fat.unload_cluster()
+        LOGGER.info('unload_cluster')
     except BaseException:
         traceback.print_exc()
         error = traceback.format_exc().splitlines()[-1]

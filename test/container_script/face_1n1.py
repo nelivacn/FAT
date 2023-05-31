@@ -23,9 +23,9 @@ MSG = logging.getLogger('msg')
 DEVICE = [0, 1]
 
 
-def get_feature_tester(fat, test_item_q, feat_q, gfbn):
+def get_gallery_feature_tester(fat, test_item_q, feat_q, gfbn):
 
-    def get_feature_batch(fat, feat_q, inner_item_list):
+    def get_gallery_feature_batch(fat, feat_q, inner_item_list):
         _img_data_list = []
         for _i in inner_item_list:
             _img_data = cv2.imread(_i[2], cv2.IMREAD_COLOR)
@@ -44,7 +44,7 @@ def get_feature_tester(fat, test_item_q, feat_q, gfbn):
         test_item = test_item_q.get()
         if test_item is None:
             if len(_item_list) > 0:
-                get_feature_batch(fat, feat_q, _item_list)
+                get_gallery_feature_batch(fat, feat_q, _item_list)
             LOGGER.info(
                 f'get_feature_tester get None: {threading.currentThread().name}'
             )
@@ -53,7 +53,7 @@ def get_feature_tester(fat, test_item_q, feat_q, gfbn):
         else:
             _item_list.append(test_item.split())
             if len(_item_list) == gfbn:
-                get_feature_batch(fat, feat_q, _item_list)
+                get_gallery_feature_batch(fat, feat_q, _item_list)
                 _item_list = []
 
 
@@ -204,7 +204,7 @@ if __name__ == '__main__':
         for i in range(gfpn):
             p_list.append(
                 threading.Thread(
-                    target=get_feature_tester, args=(fat, q_list[i], gallery_feat_q, gfbn)))
+                    target=get_gallery_feature_tester, args=(fat, q_list[i], gallery_feat_q, gfbn)))
         for pp in p_list:
             LOGGER.info('in get_feature_tester')
             pp.start()
@@ -226,7 +226,7 @@ if __name__ == '__main__':
                         )
                         LOGGER.info('ERROR: gallery insert count error')
                         MSG.info(
-                            f'{PROGRESS_FLAG}ERROR: insert count: {insert_count}\t gallery count: {gallery_count}'
+                            f'{ERROR_FLAG}ERROR: insert count: {insert_count}\t gallery count: {gallery_count}'
                         )
                         sys.exit(1)
             else:
