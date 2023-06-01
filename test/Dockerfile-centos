@@ -3,7 +3,7 @@ FROM nvidia/cuda:11.4.0-cudnn8-devel-centos7
 ENV PATH /usr/local/python3/bin/:$PATH
 RUN set -ex \
     && yum update -y \
-    && yum install -y tar vim libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make initscripts wget \
+    && yum install -y deltarpm tar vim libffi-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make initscripts wget \
     && yum clean all \
     && wget https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz \
     && tar -zxvf Python-3.8.0.tgz \
@@ -18,8 +18,7 @@ RUN set -ex \
     && ln -s /usr/local/python3/bin/python3.8 /usr/bin/python \
     && ln -s /usr/local/python3/bin/pip3 /usr/bin/pip \
     && sed -i "s#/usr/bin/python#/usr/bin/python2.7#" /usr/libexec/urlgrabber-ext-down \
-    && sed -i "s#/usr/bin/python#/usr/bin/python2.7#" /usr/bin/yum \
-    && yum install -y deltarpm
+    && sed -i "s#/usr/bin/python#/usr/bin/python2.7#" /usr/bin/yum
 
 RUN set -ex \
     && python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip \
