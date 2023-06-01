@@ -100,7 +100,6 @@ if __name__ == '__main__':
         LOGGER.info(f'fat load {assets_dir}')
         LOGGER.info(f'device: {DEVICE}')
         fat.load(assets_dir, DEVICE)
-        LOGGER.info(f'fat load {assets_dir}')
         gfpn, gfbn = fat.get_feature_parallel_num()
         LOGGER.info(f'get_feature, P: {gfpn}, B: {gfbn}')
         res_feat_len = fat.get_feature_len()
