@@ -16,13 +16,20 @@
 
     ```bash
     # 1. 启动容器
-    # <TAR_DIR> 程序包所在目录
-    # <TMP_DIR> 文件交互目录
-    # <PY_FILE> 测试脚本名, 可选[face_1n1.py, cluster.py]
+    # <BASE_DIR> 项目目录
+    # <PY_FILE> 测试脚本名, 可选[face_1n1.py, cluster.py, vehicle]
+    # <TASK_ID> 任务ID(程序包文件名下划线分隔最后一个部分, 去除 .tar)
     # <IMAGE_ID> 镜像ID
-    docker run -idt --gpus all -v <TAR_DIR>:/workspace/tars/ -v <TMP_DIR>:/workspace/projects/ --privileged=true --ipc=host -p 8089:8089 -e EVAL_SHELL=/workspace/container_script/<PY_FILE> -e CEPING_BASE_DIR=/workspace/ <IMAGE_ID>
-
-    # 例如: docker run -idt --gpus all -v /root/test/package/:/workspace/tars/ -v /root/test/tmp/:/workspace/projects/ --privileged=true --ipc=host -p 8089:8089 -e EVAL_SHELL=/workspace/container_script/face_1n1.py -e CEPING_BASE_DIR=/workspace/ 115ce227e4c2
+    docker run -idt --gpus all --privileged=true --ipc=host -p 8089:8089 \
+    -v /<BASE_DIR>/FAT/test/log/:/workspace/log/ \
+    -v /<BASE_DIR>/FAT/test/tars/:/workspace/tars/ \
+    -v /<BASE_DIR>/FAT/test/projects/:/workspace/projects/ \
+    -v /<BASE_DIR>/FAT/test/container_script/:/workspace/container_script/ \
+    -e NELIVA_EVAL_SHELL=/workspace/container_script/<PY_FILE> \
+    -e NELIVA_CEPING_BASE_DIR=/workspace \
+    -e NELIVA_TEST_SET_DIR=default \
+    -e NELIVA_TASK_ID=<TASK_ID> \
+    <IMAGE_ID>
 
     # 2. 启动容器内测试服务
     # <CONTAINER_ID> 容器ID
@@ -32,47 +39,32 @@
 * 通过 http 接口调用的方式进行程序包功能性验证
 
     **建立任务**
-    调用方式: HTTP POST
+    调用方式: HTTP GET
     接口地址: http://ip:8089/task
-    输入参数:
-    | 参数名 | 类型 | 备注 |
-    | ----- | ---- | --- |
-    | taskId | str | 任务id (程序包文件名下划线分隔最后一个部分, 去除 .tar) |
+    输入参数: 无
 
     **查看信息**
-    调用方式: HTTP POST
+    调用方式: HTTP GET
     接口地址: http://ip:8089/msg
-    输入参数:
-    | 参数名 | 类型 | 备注 |
-    | ----- | ---- | --- |
-    | taskId | str | 任务id (程序包文件名下划线分隔最后一个部分, 去除 .tar) |
+    输入参数: 无
 
     **授权**
-    调用方式: HTTP POST
-    接口地址: http://ip:8089/authorize0
-    输入参数:
-    | 参数名 | 类型 | 备注 |
-    | ----- | ---- | --- |
-    | taskId | str | 任务id (程序包文件名下划线分隔最后一个部分, 去除 .tar) |
+    调用方式: HTTP GET
+    接口地址: http://ip:8089/authorize
+    输入参数: 无
 
     **开始测试**
-    调用方式: HTTP POST
+    调用方式: HTTP GET
     接口地址: http://ip:8089/eval
-    输入参数:
-    | 参数名 | 类型 | 备注 |
-    | ----- | ---- | --- |
-    | taskId | str | 任务id (程序包文件名下划线分隔最后一个部分, 去除 .tar) |
-
-    例如使用 [postman](https://www.postman.com) 调用**查看信息**接口
-    ![查看信息](imgs/584.PIC)
+    输入参数: 无
 
 * 测试流程
     1. 根据使用的镜像操作系统拉取对应的docker镜像
     2. 通过启动容器命令启动容器
     3. 启动容器内的测试服务
     4. 调用**建立任务**接口创建测试任务
-    5. 如果需要授权, 请在宿主机 <TMP_DIR>/\<taskId>/auth 文件夹下使用 \<taskId>_fingerprint.txt 文件进行授权; 如果不需要授权, 请跳过
-    6. 如果需要授权, 请将授权文件重命名为 \<taskId>_authorize.txt 并放入宿主机 <TMP_DIR>/\<taskId>/auth 文件夹, 如果不需要授权, 请跳过
+    5. 如果需要授权, 请在宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\>/auth 文件夹下使用 \<taskId>_fingerprint.txt 文件进行授权; 如果不需要授权, 请跳过
+    6. 如果需要授权, 请将授权文件重命名为 \<taskId>_authorize.txt 并放入宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\>/auth 文件夹下, 如果不需要授权, 请跳过
     7. 调用**开始测试**接口进行测试
 
 * 技术相关的问题请在[Issues](https://github.com/nelivacn/FAT/issues)进行提问讨论
