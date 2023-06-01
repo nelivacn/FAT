@@ -63,8 +63,8 @@
     2. 通过启动容器命令启动容器
     3. 启动容器内的测试服务
     4. 调用**建立任务**接口创建测试任务
-    5. 如果需要授权, 请在宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\>/auth 文件夹下使用 \<taskId>_fingerprint.txt 文件进行授权; 如果不需要授权, 请跳过
-    6. 如果需要授权, 请将授权文件重命名为 \<taskId>_authorize.txt 并放入宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\>/auth 文件夹下, 如果不需要授权, 请跳过
+    5. 如果需要授权, 请在宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\>/auth 文件夹下使用 \<TASK_ID>_fingerprint.txt 文件进行授权; 如果不需要授权, 请跳过
+    6. 如果需要授权, 请将授权文件重命名为 \<TASK_ID>_authorize.txt 并放入宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\>/auth 文件夹下, 如果不需要授权, 请跳过
     7. 调用**开始测试**接口进行测试
 
 * 技术相关的问题请在[Issues](https://github.com/nelivacn/FAT/issues)进行提问讨论
