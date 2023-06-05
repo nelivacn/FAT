@@ -5,11 +5,11 @@
 * 获取镜像
 
     ```bash
-    docker pull msbrm/fat_gpu:2023ubuntu18.04
+    docker pull nelivacn/fat_gpu_ubuntu:v1.4
     ```
 
     ```bash
-    docker pull msbrm/fat_gpu:2023centos7
+    docker pull nelivacn/fat_gpu_centos:v2.5
     ```
 
 * 启动容器与测试服务
@@ -24,6 +24,7 @@
     -v /<BASE_DIR>/FAT/test/log/:/workspace/log/ \
     -v /<BASE_DIR>/FAT/test/tars/:/workspace/tars/ \
     -v /<BASE_DIR>/FAT/test/projects/:/workspace/projects/ \
+    -v /<BASE_DIR>/FAT/test/docker-ceping1/:/workspace/docker-ceping1/ \
     -v /<BASE_DIR>/FAT/test/container_script/:/workspace/container_script/ \
     -e NELIVA_EVAL_SHELL=/workspace/container_script/<PY_FILE> \
     -e NELIVA_CEPING_BASE_DIR=/workspace \
