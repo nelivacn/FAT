@@ -5,3 +5,7 @@ logging:
 spring:
   kafka:
     bootstrap-servers: "localhost:9092"
+my: 
+  msg-topic: 't1'
+  progress-topic: 't2'
+  wrong-topic: 't3'
