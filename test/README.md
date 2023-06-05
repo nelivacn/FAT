@@ -2,7 +2,7 @@
 
 > 适用范围：采用容器内授权方案的测试项目
 
-* 获取镜像，[ [ubuntu18.04](https://hub.docker.com/layers/msbrm/fat_gpu/2023ubuntu18.04/images/sha256-24897635dc807a07dcfd05efe36c1627391ee53797e80161de1c16f51317f234?context=repo), [centos7](https://hub.docker.com/layers/msbrm/fat_gpu/2023centos7/images/sha256-04aa1fe30aab1f349688fdcab5642803be7968d63ff14b2c44b47fb86b29e92f?context=repo) ]
+* 获取镜像
 
     ```bash
     docker pull msbrm/fat_gpu:2023ubuntu18.04
