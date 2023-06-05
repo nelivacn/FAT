@@ -2,6 +2,13 @@
 
 > 适用范围：采用容器内授权方案的测试项目
 
+* 获取该项目到本地<BASE_DIR>下并赋予文件所需权限
+    ```bash
+    cd <BASE_DIR>
+    git https://github.com/nelivacn/FAT.git
+    chmod -R 777 /<BASE_DIR>/FAT/test/docker-ceping1/
+    ```
+
 * 获取镜像
 
     ```bash
@@ -16,7 +23,7 @@
 
     ```bash
     # 1. 启动容器
-    # <BASE_DIR> 项目目录
+    # <BASE_DIR> 项目所在目录
     # <PY_FILE> 测试脚本名, 可选[face_1n1.py, cluster.py, vehicle.py]
     # <TASK_ID> 任务ID(程序包文件名下划线分隔最后一个部分, 去除 .tar)
     # <IMAGE_ID> 镜像ID
@@ -34,7 +41,6 @@
 
     # 2. 启动容器内测试服务
     # <CONTAINER_ID> 容器ID
-    chmod -R 777 /<BASE_DIR>/FAT/test/docker-ceping1/
     docker exec -it <CONTAINER_ID> /bin/bash -c "/workspace/docker-ceping1/my.sh start"
     ```
 
