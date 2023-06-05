@@ -69,4 +69,6 @@
     6. 如果需要授权, 请将授权文件重命名为 \<TASK_ID>_authorize.txt 并放入宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\>/auth 文件夹下, 如果不需要授权, 请跳过
     7. 调用**开始测试**接口进行测试
 
+* 宿主机 /\<BASE_DIR\>/FAT/test/projects/\<TASK_ID\> 文件夹下有测试日志信息
+
 * 技术相关的问题请在[Issues](https://github.com/nelivacn/FAT/issues)进行提问讨论
