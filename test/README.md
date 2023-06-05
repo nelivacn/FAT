@@ -34,6 +34,7 @@
 
     # 2. 启动容器内测试服务
     # <CONTAINER_ID> 容器ID
+    chmod -R 777 /<BASE_DIR>/FAT/test/docker-ceping1/
     docker exec -it <CONTAINER_ID> /bin/bash -c "/workspace/docker-ceping1/my.sh start"
     ```
 
