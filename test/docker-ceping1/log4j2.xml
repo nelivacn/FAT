@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30">
+    <!-- v230602-->
+    <!-- 启动参数指定配置-Dlog4j.configurationFile=/path/to/file -->
+    <Properties>
+        <!--
+        <Property name="logBase">./logs</Property>
+        <Property name="adminLogDir">./logs</Property>
+        -->
+        <Property name="companyLogDir">$${env:NELIVA_CEPING_BASE_DIR}/log/$${env:NELIVA_TASK_ID}</Property>
+    </Properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %l[%t]%n%-5p: %m%n"/>
+        </Console>
+        <!--
+        <RollingFile name="daily64m" fileName="${logBase}/daily.log"
+                     filePattern="${logBase}/daily-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+        <RollingRandomAccessFile name="dailyLog" fileName="${logBase}/daily.log"
+                                 filePattern="${logBase}/$${date:yyyy-MM}/daily-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="adminLog" fileName="${adminLogDir}/admin.log"
+                                 filePattern="${adminLogDir}/$${date:yyyy-MM}/admin-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="12" modulate="true" />
+                <SizeBasedTriggeringPolicy size="256 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingRandomAccessFile>
+        -->
+        
+
+        <RollingRandomAccessFile name="companyLog" fileName="${companyLogDir}/company.log"
+                                 filePattern="${companyLogDir}/$${date:yyyy-MM}/company-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} [%t] %-5p: %m%n" charset="utf-8" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="12" modulate="true" />
+                <SizeBasedTriggeringPolicy size="256 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingRandomAccessFile>
+
+        <!--
+        <RollingRandomAccessFile name="traceLog" fileName="${logBase}/trace.log"
+                                 filePattern="${logBase}/$${date:yyyy-MM}/trace-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <Filters>
+                <ThresholdFilter level="DEBUG" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="debugLog" fileName="${logBase}/debug.log"
+                                 filePattern="${logBase}/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="infoLog" fileName="${logBase}/info.log"
+                                 filePattern="${logBase}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="warnLog" fileName="${logBase}/warn.log"
+                                 filePattern="${logBase}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="errorLog" fileName="${logBase}/error.log"
+                                 filePattern="${logBase}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} %C(%L)[%t]%n%-5p: %m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="nettyAccessLog" fileName="${logBase}/netty.log"
+                                 filePattern="${logBase}/$${date:yyyy-MM}/netty-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="%m%n" charset="utf-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="8" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="256 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+        -->
+        
+    </Appenders>
+    <Loggers>
+        <Root level="WARN">
+            <AppenderRef ref="companyLog"/>
+
+            <!--
+            <AppenderRef ref="adminLog"/>
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="traceLog"/>
+            <AppenderRef ref="debugLog"/>
+            <AppenderRef ref="infoLog"/>
+            <AppenderRef ref="warnLog"/>
+            <AppenderRef ref="errorLog"/>
+            -->
+        </Root>
+        <Logger name="com.zd" level="DEBUG"/>
+
+        <!--
+        <Logger name="yf" level="DEBUG"/>
+        <Logger name="reactor.netty.http.server.AccessLog" level="INFO" additivity="false">
+            <AppenderRef ref="nettyAccessLog"/>
+        </Logger>
+        -->
+    </Loggers>
+</Configuration>
