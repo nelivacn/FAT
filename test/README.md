@@ -17,7 +17,7 @@
     ```bash
     # 1. 启动容器
     # <BASE_DIR> 项目目录
-    # <PY_FILE> 测试脚本名, 可选[face_1n1.py, cluster.py, vehicle]
+    # <PY_FILE> 测试脚本名, 可选[face_1n1.py, cluster.py, vehicle.py]
     # <TASK_ID> 任务ID(程序包文件名下划线分隔最后一个部分, 去除 .tar)
     # <IMAGE_ID> 镜像ID
     docker run -idt --gpus all --privileged=true --ipc=host -p 8089:8089 \
