@@ -55,6 +55,7 @@
     调用方式: HTTP POST
     接口地址: http://ip:8089/authorize
     输入参数: {}
+    
     例如: curl -H "Content-Type: application/json" -X POST  http://127.0.0.1:8089/authorize -d'{}'
 
     **开始测试**
