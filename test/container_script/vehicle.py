@@ -97,7 +97,7 @@ if __name__ == '__main__':
     try:
         from pyfat_implement import PyFAT
 
-        fat = PyFAT(sample_count)
+        fat = PyFAT()
         LOGGER.info('fat init')
         assets_dir = str(fat_dir / 'assets')
         LOGGER.info(f'fat load {assets_dir}')
