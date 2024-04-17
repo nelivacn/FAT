@@ -25,7 +25,7 @@
 
     ```bash
     cd $WORKDIR/FAT/test/selftest/
-    ./my.sh
+    ./st_start.sh
     ```
 
 * 开始自助测试
