@@ -5,6 +5,7 @@
 * 获取该项目到本地工作目录下并赋予文件所需权限
     ```bash
     WORKDIR=/workspace
+    SHAREDIR=/share
     mkdir $WORKDIR
     cd $WORKDIR
     git https://github.com/nelivacn/FAT.git
@@ -25,6 +26,7 @@
 
     ```bash
     cd $WORKDIR/FAT/test/selftest/
+    mkdir $SHAREDIR
     ./st_start.sh
     ```
 
