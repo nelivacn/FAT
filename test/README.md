@@ -6,7 +6,9 @@
     ```bash
     WORKDIR=/workspace
     SHAREDIR=/share
-    mkdir $WORKDIR
+    mkdir $WORKDIR $SHAREDIR
+    cd $SHAREDIR
+    mkdir projects
     cd $WORKDIR
     git https://github.com/nelivacn/FAT.git
     chmod -R 777 $WORKDIR/FAT/test/selftest/
@@ -26,7 +28,6 @@
 
     ```bash
     cd $WORKDIR/FAT/test/selftest/
-    mkdir $SHAREDIR
     ./st_start.sh
     ```
 
