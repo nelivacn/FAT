@@ -50,7 +50,7 @@
 
     ```bash
     cd $WORKDIR/selftest/
-    ./selfTest.sh
+    ./selfTest.sh start
     ```
 
 * 开始自助测试
@@ -64,6 +64,8 @@
     7. 如果当前状态为**测试失败**，请在日志输出区域中查找失败原因并更正后重新进行自助测试
 
     **浏览器不要刷新**
+
+    **重新测试需要执行./selfTest.sh restart**
 
     **该自助测试只涉及接口格式校验以及稳定性测试，不涉及任何性能测试**
 * 技术相关的问题请在[Issues](https://github.com/nelivacn/FAT/issues)进行提问讨论
