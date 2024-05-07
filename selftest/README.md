@@ -65,7 +65,7 @@
 
     **浏览器不要刷新**
 
-    **重新测试需要重启测试服务./selfTest.sh restart**
+    **重新测试需要重启测试服务./selfTest.sh start**
 
     **该自助测试只涉及接口格式校验以及稳定性测试，不涉及任何性能测试**
 * 技术相关的问题请在[Issues](https://github.com/nelivacn/FAT/issues)进行提问讨论
