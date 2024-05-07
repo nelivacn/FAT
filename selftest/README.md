@@ -14,6 +14,18 @@
     chmod -R 777 $WORKDIR/selftest/
     ```
 
+* 修改 **docker.service** 文件 配置TCP远程访问
+
+    ```bash
+    systemctl stop docker
+    vim /lib/systemd/system/docker.service
+    # [Service] ExecStart 项新增  -H tcp://0.0.0.0:2345
+    # 例 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock -H tcp://0.0.0.0:2345
+    # 保存退出
+    systemctl daemon-reload
+    systemctl start docker
+    ```
+
 * 获取镜像
 
     ```bash
