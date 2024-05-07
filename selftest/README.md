@@ -5,29 +5,37 @@
 * 获取该项目到本地工作目录下并赋予文件所需权限
     ```bash
     WORKDIR=/workspace
-    SHAREDIR=/share
-    mkdir $WORKDIR $SHAREDIR
-    cd $SHAREDIR
-    mkdir projects
+    mkdir $WORKDIR
     cd $WORKDIR
+    mkdir projects tars
+    cd /tmp
     git https://github.com/nelivacn/FAT.git
-    chmod -R 777 $WORKDIR/FAT/test/selftest/
+    cp -r /tmp/FAT/test/selftest/ $WORKDIR
+    chmod -R 777 $WORKDIR/selftest/
     ```
 
 * 获取镜像
 
     ```bash
-    docker pull nelivacn/fat_gpu_ubuntu:v1.4
+    docker pull nelivacn/fat:cuda12.2.2-ubuntu22.04-baseV2024.1
     ```
 
     ```bash
-    docker pull nelivacn/fat_gpu_centos:v2.5
+    docker pull nelivacn/fat:cuda11.4.3-ubuntu18.04-baseV2024.1
+    ```
+
+    ```bash
+    docker pull nelivacn/fat:cuda12.2.2-centos7-baseV2024.1
+    ```
+
+    ```bash
+    docker pull nelivacn/fat:cuda11.4.3-centos7-baseV2024.1
     ```
 
 * 启动测试服务
 
     ```bash
-    cd $WORKDIR/FAT/test/selftest/
+    cd $WORKDIR/selftest/
     ./st_start.sh
     ```
 
